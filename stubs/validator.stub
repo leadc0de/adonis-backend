@@ -1,0 +1,26 @@
+{{#var validatorName = string(generators.validatorName(name)).noCase()}}
+{{#var validatorFileName = generators.validatorFileName(name)}}
+{{#var createAction = generators.validatorActionName(name, 'create')}}
+{{#var updateAction = generators.validatorActionName(name, 'update')}}
+{{{
+  exports({
+    to: app.makePath("apps", module, "validators", validatorFileName)
+  })
+}}}
+import vine from '@vinejs/vine'
+
+/**
+ * Validator to validate the payload when creating
+ * a new {{ validatorName }}.
+ */
+export const {{ createAction }} = vine.compile(
+  vine.object({})
+)
+
+/**
+ * Validator to validate the payload when updating
+ * an existing {{ validatorName }}.
+ */
+export const {{ updateAction }} = vine.compile(
+  vine.object({})
+)

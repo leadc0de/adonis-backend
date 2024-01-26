@@ -4,7 +4,7 @@
     "rootDir": "./",
     "outDir": "./build",
     "paths": {
-      "#apps/*": ["./apps/*"],
+      "#apps/*": ["./apps/*.js"],
       "#controllers/*": ["./apps/controllers/*.js"],
       "#exceptions/*": ["./apps/exceptions/*.js"],
       "#models/*": ["./apps/models/*.js"],

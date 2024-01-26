@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit"
   },
   "imports": {
-    "#apps/*": "./apps/*.ts",
+    "#apps/*": "./apps/*.js",
     "#controllers/*": "./apps/controllers/*.js",
     "#exceptions/*": "./apps/exceptions/*.js",
     "#models/*": "./apps/models/*.js",
@@ -51,7 +51,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@adonisjs/auth": "^9.0.2",
+    "@adonisjs/auth": "^9.0.3",
     "@adonisjs/core": "^6.2.1",
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/lucid": "^19.0.0",

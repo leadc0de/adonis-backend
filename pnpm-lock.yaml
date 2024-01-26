@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@adonisjs/auth':
-    specifier: ^9.0.2
-    version: 9.0.2(@adonisjs/assembler@7.1.0)(@adonisjs/core@6.2.1)(@adonisjs/lucid@19.0.0)(@adonisjs/session@7.1.1)(@japa/api-client@2.0.2)(@japa/plugin-adonisjs@3.0.0)
+    specifier: ^9.0.3
+    version: 9.0.3(@adonisjs/assembler@7.1.0)(@adonisjs/core@6.2.1)(@adonisjs/lucid@19.0.0)(@adonisjs/session@7.1.1)(@japa/api-client@2.0.2)(@japa/plugin-adonisjs@3.0.0)
   '@adonisjs/core':
     specifier: ^6.2.1
     version: 6.2.1(@adonisjs/assembler@7.1.0)(@vinejs/vine@1.7.0)
@@ -145,8 +145,8 @@ packages:
       ts-morph: 21.0.1
       typescript: 5.3.3
 
-  /@adonisjs/auth@9.0.2(@adonisjs/assembler@7.1.0)(@adonisjs/core@6.2.1)(@adonisjs/lucid@19.0.0)(@adonisjs/session@7.1.1)(@japa/api-client@2.0.2)(@japa/plugin-adonisjs@3.0.0):
-    resolution: {integrity: sha512-jNNVZCJKpT0FftmC8pb8j6Fk03HZZBT2ZxhLe3tWqSSpv4MITOz4tmfdSXRSLFZui+/kGUQcqM/wjy4O/Ub7BQ==}
+  /@adonisjs/auth@9.0.3(@adonisjs/assembler@7.1.0)(@adonisjs/core@6.2.1)(@adonisjs/lucid@19.0.0)(@adonisjs/session@7.1.1)(@japa/api-client@2.0.2)(@japa/plugin-adonisjs@3.0.0):
+    resolution: {integrity: sha512-BPgZIf9rRQdnVDpihRKVbWE6suQtcYe+nqxlf9oIcGg8BBPbShs4LBj0vzZ+kHvYDJIag5JETeuE+KHXWuyPtg==}
     engines: {node: '>=18.16.0'}
     peerDependencies:
       '@adonisjs/core': ^6.2.0

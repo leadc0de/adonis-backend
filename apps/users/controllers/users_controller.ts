@@ -6,21 +6,33 @@ import UserService from '#apps/users/services/user_service'
 export default class UsersController {
   constructor(protected userService: UserService) {}
 
-  async index({ request }: HttpContext) {
-    const { page = 1, size = 10 } = request.qs()
+  async index({ request, response }: HttpContext) {
+    const page = request.input('page', 1)
+    const size = request.input('size', 10)
 
-    return this.userService.findAll({ page, size })
+    const users = await this.userService.findAll({ page, size })
+    return response.send(users)
   }
 
   /**
    * Handle form submission for the create action
    */
-  async store({ }: HttpContext) {}
+  async store({ }: HttpContext) {
+
+  }
 
   /**
    * Show individual record
    */
-  async show({ }: HttpContext) {}
+  async show({ params, request, response }: HttpContext) {
+    const includeRole = request.input('includeRole', true)
+
+    const user = await this.userService.findById(params.id, {
+      includeRole
+    })
+
+    return response.send(user)
+  }
 
   /**
    * Handle form submission for the edit action

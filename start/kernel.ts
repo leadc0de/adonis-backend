@@ -34,6 +34,7 @@ server.use([
  */
 router.use([
   () => import('@adonisjs/core/bodyparser_middleware'),
+  () => import('#apps/shared/middleware/set_token_header'),
   () => import('@adonisjs/session/session_middleware'),
   () => import('@adonisjs/auth/initialize_auth_middleware'),
   () => import('#apps/shared/middleware/initialize_bouncer_middleware')

@@ -1,13 +1,19 @@
 {{#var controllerName = generators.controllerName(name)}}
 {{#var controllerFileName = generators.controllerFileName(name)}}
+{{#var serviceName = generators.serviceName(name)}}
 {{{
   exports({
-    to: app.makePath("apps", apps, "controllers" , controllerFileName)
+    to: app.makePath("apps", name, "controllers" , controllerFileName)
   })
 }}}
 import type { HttpContext } from '@adonisjs/core/http'
+import { inject } from '@adonisjs/core'
+import {{ serviceName }} from '#{{ generators.importPath("apps", name, "services" , string.snakeCase(serviceName)) }}'
 
+@inject()
 export default class {{ controllerName }} {
+  constructor(private {{ string.camelCase(serviceName) }}: {{ serviceName }}) {}
+
   /**
    * Display a list of resource
    */

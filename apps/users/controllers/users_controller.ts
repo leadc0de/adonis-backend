@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import {inject} from '@adonisjs/core'
 import UserService from '#apps/users/services/user_service'
 import UserPolicy from '#apps/users/policies/user_policy'
+import {createUserValidator} from "#apps/users/validators/user";
 
 @inject()
 export default class UsersController {
@@ -11,17 +12,24 @@ export default class UsersController {
     await bouncer.with(UserPolicy).authorize('view' as never)
 
     const page = request.input('page', 1)
-    const size = request.input('size', 10)
+    const size = request.input('size', 30)
+    const includeRole = request.input('includeRole', false)
 
-    const users = await this.userService.findAll({ page, size })
+    const users = await this.userService.findAll({ page, size, includeRole })
     return response.send(users)
   }
 
   /**
    * Handle form submission for the create action
    */
-  async store({ }: HttpContext) {
+  async store({ request, response }: HttpContext) {
+    const payload = await request.validateUsing(createUserValidator)
 
+    const user = await this.userService.create(payload)
+
+    return response.send({
+      data: user
+    })
   }
 
   /**

@@ -6,8 +6,8 @@ const STUBS_ROOT = new URL('./stubs', import.meta.url)
 
 export default class GenerateModuleBase extends BaseCommand {
   static commandName = 'generate:module'
-  static description = 'Generate a module declaration'
   static aliases = ['g:module']
+  static description = 'Generate a module declaration'
 
   static options: CommandOptions = {}
 
@@ -27,6 +27,7 @@ export default class GenerateModuleBase extends BaseCommand {
       }),
       codemods.makeUsingStub(STUBS_ROOT.pathname, 'validator.stub', {
         name: this.name,
+        module: this.name,
         validatorName: string.pascalCase(this.name + 'Validator'),
         validatorFileName: `${string.pluralize(this.name)}_validator.ts`,
         createAction: string.camelCase('create' + this.name + 'Validator'),

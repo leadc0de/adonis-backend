@@ -6,7 +6,7 @@
 {{#var updateSchema = string.pascalCase('update' + string.pascalCase(name) + 'Schema')}}
 {{{
   exports({
-    to: app.makePath("apps", name, "validators", validatorFileName)
+    to: app.makePath("apps", module, "validators", validatorFileName)
   })
 }}}
 import vine from '@vinejs/vine'

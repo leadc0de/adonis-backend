@@ -12,7 +12,7 @@
 |
 */
 
-import {usersPolicies} from "#apps/users/policies/main";
+import {usersPolicies} from "#apps/users/policies";
 
 export const policies = {
   ...usersPolicies

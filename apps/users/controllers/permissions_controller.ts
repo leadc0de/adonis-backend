@@ -8,9 +8,9 @@ export default class PermissionsController {
 
   async index({ request }: HttpContext) {
     const page = request.input('page', 1)
-    const size = request.input('size', 10)
+    const limit = request.input('limit', 10)
 
     return this.permissionService
-      .findAll({ page, size })
+      .findAll({ page, limit })
   }
 }

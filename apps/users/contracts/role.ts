@@ -1,4 +1,4 @@
 export interface FindAll {
   page?: number
-  size?: number
+  limit?: number
 }

@@ -13,10 +13,10 @@ export default class RolesController {
    */
   async index({ request, response }: HttpContext) {
     const page = request.input('page', 1)
-    const size = request.input('size', 10)
+    const limit = request.input('limit', 10)
 
     const roles = await this.roleService
-      .findAll({ page, size })
+      .findAll({ page, limit })
 
     return response.send(roles)
   }

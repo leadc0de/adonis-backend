@@ -2,7 +2,7 @@ import {BasePolicy} from '@adonisjs/bouncer'
 import User from '#apps/users/models/user'
 import { AuthorizerResponse } from '@adonisjs/bouncer/types'
 import { inject } from '@adonisjs/core'
-import PermissionResolver from '#apps/shared/services/permission_resolver'
+import PermissionResolver from '#apps/shared/services/permissions/permission_resolver'
 
 @inject()
 export default class UserPolicy extends BasePolicy {
@@ -11,12 +11,8 @@ export default class UserPolicy extends BasePolicy {
   }
 
   async view(user: User): Promise<AuthorizerResponse> {
-    const permissions = await this.permissionResolver.getPermissions(user)
     return this.permissionResolver
-      .verifyAccess(
-        permissions,
-        'user',
-        'view', 'store', 'update', 'delete'
-      )
+      .createResolve(user, 'user')
+      .verifyAccess('view', 'store', 'update', 'delete')
   }
 }

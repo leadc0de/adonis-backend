@@ -1,4 +1,5 @@
 import User from "#apps/users/models/user";
+import PermissionResolverBuilder from '#apps/shared/services/permissions/permission_resolver_builder'
 
 export default class PermissionResolver {
   async getPermissions(user: User) {
@@ -19,10 +20,7 @@ export default class PermissionResolver {
     return permissions
   }
 
-  verifyAccess(permissions: string[], key: string, ...attributes: string[]): boolean {
-    return attributes
-      .map(attribute => `${attribute}:${key}`)
-      .some(permission => permissions.includes(permission))
+  public createResolve(user: User, key: string): PermissionResolverBuilder {
+    return new PermissionResolverBuilder(this,user, key)
   }
-
 }

@@ -1,6 +1,20 @@
 import vine from '@vinejs/vine'
 import { Infer } from '@vinejs/vine/types'
 
+const permissionValidation = {
+  permissions: vine.array(vine
+    .string()
+    .exists(async (db, value) => {
+      const role = await db.from('roles')
+        .select('id')
+        .where('id', value)
+        .first()
+
+      return !!role
+    })
+  ).optional()
+}
+
 /**
  * Validator to validate the payload when creating
  * a new role.
@@ -9,17 +23,7 @@ export const storeRoleValidator = vine.compile(
   vine.object({
     label: vine.string().trim(),
     power: vine.number().range([0, 100]),
-    permissions: vine.array(vine
-      .string()
-      .exists(async (db, value) => {
-        const role = await db.from('roles')
-          .select('id')
-          .where('id', value)
-          .first()
-
-        return !!role
-      })
-    ).optional()
+    ...permissionValidation
   })
 )
 
@@ -28,7 +32,11 @@ export const storeRoleValidator = vine.compile(
  * an existing role.
  */
 export const updateRoleValidator = vine.compile(
-  vine.object({})
+  vine.object({
+    label: vine.string().trim().optional(),
+    power: vine.number().range([0, 100]).optional(),
+    ...permissionValidation
+  })
 )
 
 export type StoreRoleSchema = Infer<typeof storeRoleValidator>

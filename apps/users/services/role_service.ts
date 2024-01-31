@@ -11,6 +11,12 @@ export default class RoleService {
       .paginate(page, size)
   }
 
+  async findById(roleId: Role['id']) {
+    return Role.query()
+      .where('id', roleId)
+      .firstOrFail()
+  }
+
   async create (schema: StoreRoleSchema): Promise<Role> {
     return db.transaction(async (trx: TransactionClientContract): Promise<Role> => {
       const role = await Role.create(schema, { client: trx })

@@ -20,6 +20,10 @@ export default class RolesController {
     return response.send(roles)
   }
 
+  async show({ params }: HttpContext): Promise<Role> {
+    return this.roleService.findById(params.id)
+  }
+
   async store({ request }: HttpContext): Promise<void> {
     const data = await request.validateUsing(storeRoleValidator)
     await this.roleService.create(data)

@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import {inject} from "@adonisjs/core";
 import RoleService from "#apps/users/services/role_service";
+import { storeRoleValidator } from '#apps/users/validators/role_validator'
 
 @inject()
 export default class RolesController {
@@ -16,5 +17,10 @@ export default class RolesController {
       .findAll({ page, size })
 
     return response.send(roles)
+  }
+
+  async store({ request }: HttpContext): Promise<void> {
+    const data = await request.validateUsing(storeRoleValidator)
+    await this.roleService.create(data)
   }
 }

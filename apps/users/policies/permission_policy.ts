@@ -10,6 +10,14 @@ export default class PermissionPolicy extends BasePolicy {
     super()
   }
 
+  async before(user: User | null) {
+    if (user) {
+      const permissions = await this.permissionResolver.getPermissions(user)
+
+      if (permissions.includes('admin')) return true
+    }
+  }
+
   async view(user: User): Promise<AuthorizerResponse> {
     return this.permissionResolver
       .createResolve(user, 'role')

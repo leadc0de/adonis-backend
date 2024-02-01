@@ -3,6 +3,7 @@ import {middleware} from "#start/kernel";
 
 const UsersController = () => import("#apps/users/controllers/users_controller")
 const RolesController = () => import("#apps/users/controllers/roles_controller")
+const PermissionsController = () => import('#apps/users/controllers/permissions_controller')
 
 router.group(() => {
   router.group(() => {
@@ -18,4 +19,8 @@ router.group(() => {
     router.post('/:id', [RolesController, 'update'])
     router.delete('/:id', [RolesController, 'destroy'])
   }).prefix('roles')
+
+  router.group(() => {
+    router.get('/', [PermissionsController, 'index'])
+  }).prefix('/permissions')
 }).use(middleware.auth())

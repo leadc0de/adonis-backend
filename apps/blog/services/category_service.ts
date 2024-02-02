@@ -4,6 +4,7 @@ import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 import Category from '#apps/blog/models/category'
 import { DateTime } from 'luxon'
+import { randomUUID } from 'crypto'
 
 export default class CategoryService {
   private baseIconS3 = `blog/categories`
@@ -21,19 +22,20 @@ export default class CategoryService {
 
   public async create(schema: CreateCategorySchema) {
     return db.transaction(async (trx: TransactionClientContract): Promise<Category> => {
+      const uid: string = randomUUID()
+
       const category = await Category.create({
+        id: uid,
         name: schema.name,
         description: schema.description,
         state: schema.state,
-        visibleAt: schema.visibleAt ? DateTime.fromJSDate(schema.visibleAt) : null
+        visibleAt: schema.visibleAt ? DateTime.fromJSDate(schema.visibleAt) : null,
+        icon: schema.icon ? `${this.baseIconS3}/icons/${uid}.${schema.icon?.extname}` : null,
+        thumbnail: schema.thumbnail ? `${this.baseIconS3}/thumbnails/${uid}.${schema.thumbnail?.extname}` : null,
       }, { client: trx })
 
       // Todo add icon and thumbnail uploads in s3
-
-      return category.merge({
-        icon: schema.icon ? `${this.baseIconS3}/icons/${category.id}.${schema.icon?.extname}` : null,
-        thumbnail: schema.thumbnail ? `${this.baseIconS3}/thumbnails/${category.id}.${schema.thumbnail?.extname}` : null,
-      }).save()
+      return category
     })
   }
 

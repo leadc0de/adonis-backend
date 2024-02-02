@@ -1,6 +1,10 @@
-import { BaseModel, beforeCreate, column } from '@adonisjs/lucid/orm'
+import { BaseModel, beforeCreate, belongsTo, column, manyToMany } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 import { randomUUID } from 'node:crypto'
+import User from '#apps/users/models/user'
+import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
+import Tag from '#apps/blog/models/tag'
+import Category from '#apps/blog/models/category'
 
 export enum ArticleState {
   PUBLISHED = 'published',
@@ -10,6 +14,12 @@ export enum ArticleState {
 export default class Article extends BaseModel {
   @column({ isPrimary: true })
   declare id: string
+
+  @column()
+  declare userId: string
+
+  @column()
+  declare categoryId: string
 
   @column()
   declare title: string
@@ -41,4 +51,13 @@ export default class Article extends BaseModel {
       model.id = randomUUID()
     }
   }
+
+  @belongsTo(() => User)
+  declare author: BelongsTo<typeof User>
+
+  @belongsTo(() => Category)
+  declare category: BelongsTo<typeof Category>
+
+  @manyToMany(() => Tag)
+  declare tags: ManyToMany<typeof Tag>
 }

@@ -7,7 +7,7 @@ const STUBS_ROOT = new URL('./stubs', import.meta.url)
 export default class GenerateModuleValidator extends BaseCommand {
   static commandName = 'generate:validator'
   static aliases = ['g:validator']
-  static description = 'Generate a controller in given module'
+  static description = 'Generate a validator in given module'
 
   static options: CommandOptions = {}
 

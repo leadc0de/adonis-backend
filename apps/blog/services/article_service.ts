@@ -28,18 +28,25 @@ export default class ArticleService {
 
   public async create (authorId: string, schema: CreateArticleSchema) {
     return db.transaction(async (trx) => {
-      return Article.create({
+      const article = await Article.create({
         ...schema,
         userId: authorId,
       }, { client: trx })
+
+      await article.useTransaction(trx).related('tags').sync(schema.tagIds)
+
+      return article
     })
   }
 
   public async update (article: Article, schema: UpdateArticleSchema) {
     return db.transaction(async (trx) => {
-      return article.useTransaction(trx)
+      await article.useTransaction(trx)
         .merge(schema)
         .save()
+
+      await article.related('tags').sync(schema.tagIds)
+      return article
     })
   }
 }

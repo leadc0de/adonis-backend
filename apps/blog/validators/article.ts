@@ -17,7 +17,7 @@ const categoryId = vine.string().trim().exists(async (db, value, _) => {
   return !!category
 })
 
-const tags = vine.array(vine.string().trim().exists(async (db, value, _) => {
+const tagIds = vine.array(vine.string().trim().exists(async (db, value, _) => {
   const tag = await db.from(Tag.name)
     .where('id', value)
     .firstOrFail()
@@ -47,7 +47,7 @@ export const createArticleValidator = vine.compile(
     publishedAt: vine.datetime().nullable(),
     isPinned: vine.boolean(),
     state: vine.enum(ArticleState),
-    tags
+    tagIds
   }).merge(requiredOnPublishFields)
 )
 
@@ -62,7 +62,7 @@ export const updateArticleValidator = vine.compile(
     publishedAt: vine.datetime().nullable(),
     isPinned: vine.boolean(),
     state: vine.enum(ArticleState),
-    tags
+    tagIds
   }).merge(requiredOnPublishFields)
 )
 

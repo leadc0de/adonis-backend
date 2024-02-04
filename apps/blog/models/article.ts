@@ -39,6 +39,9 @@ export default class Article extends BaseModel {
   @column()
   declare publishedAt: DateTime | null
 
+  @column()
+  declare isPinned: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 

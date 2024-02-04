@@ -19,7 +19,7 @@ export default class Article extends BaseModel {
   declare userId: string
 
   @column()
-  declare categoryId: string
+  declare categoryId: string | null
 
   @column()
   declare title: string

@@ -1,13 +1,16 @@
 import PermissionResolver from '#apps/shared/services/permissions/permission_resolver'
-import User from '#apps/users/models/user'
+import {ResourceAccess} from '#apps/authentication/guards/jwt_guard'
 
 export default class PermissionResolverBuilder {
-  constructor (private resolver: PermissionResolver, private user: User, private key: string) {}
+  constructor (
+    private resolver: PermissionResolver,
+    private resourceAcces: ResourceAccess, private key: string
+  ) {}
 
   public async verifyAccess(...permissions: string[]): Promise<boolean> {
-    const userPermissions = await this.resolver.getPermissions(this.user)
+    const userResourcesAccess = await this.resolver.getResourceAccess(this.resourceAcces, this.key)
+
     return permissions
-      .map((permission: string) => `${this.key}:${permission}`)
-      .some(permission => userPermissions.includes(permission))
+      .some(permission => userResourcesAccess.includes(permission))
   }
 }

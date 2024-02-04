@@ -1,5 +1,6 @@
 import User from "#apps/users/models/user";
 import PermissionResolverBuilder from '#apps/shared/services/permissions/permission_resolver_builder'
+import {ResourceAccess} from "#apps/authentication/guards/jwt_guard";
 
 export default class PermissionResolver {
   async getPermissions(user: User) {
@@ -20,7 +21,11 @@ export default class PermissionResolver {
     return permissions
   }
 
-  public createResolve(user: User, key: string): PermissionResolverBuilder {
-    return new PermissionResolverBuilder(this,user, key)
+  async getResourceAccess(data: ResourceAccess, key: string): Promise<string[]> {
+    return data[key]?.roles ?? []
+  }
+
+  public createResolve(resourceAccess: ResourceAccess, key: string): PermissionResolverBuilder {
+    return new PermissionResolverBuilder(this, resourceAccess, key)
   }
 }

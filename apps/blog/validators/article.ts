@@ -2,6 +2,7 @@ import vine from '@vinejs/vine'
 import { Infer } from '@vinejs/vine/types'
 import { ArticleState } from '#apps/blog/models/article'
 import Category from '#apps/blog/models/category'
+import Tag from '#apps/blog/models/tag'
 
 const descriptionField = vine.string()
   .trim()
@@ -15,6 +16,14 @@ const categoryId = vine.string().trim().exists(async (db, value, _) => {
 
   return !!category
 })
+
+const tags = vine.array(vine.string().trim().exists(async (db, value, _) => {
+  const tag = await db.from(Tag.name)
+    .where('id', value)
+    .firstOrFail()
+
+  return !!tag
+}))
 
 const requiredOnPublishFields = vine.group([
   vine.group.if((data) => data.state === ArticleState.PUBLISHED, {
@@ -38,6 +47,7 @@ export const createArticleValidator = vine.compile(
     publishedAt: vine.datetime().nullable(),
     isPinned: vine.boolean(),
     state: vine.enum(ArticleState),
+    tags
   }).merge(requiredOnPublishFields)
 )
 
@@ -52,6 +62,7 @@ export const updateArticleValidator = vine.compile(
     publishedAt: vine.datetime().nullable(),
     isPinned: vine.boolean(),
     state: vine.enum(ArticleState),
+    tags
   }).merge(requiredOnPublishFields)
 )
 

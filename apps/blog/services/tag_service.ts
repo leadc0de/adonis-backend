@@ -1,7 +1,7 @@
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 import Tag from '#apps/blog/models/tag'
-import { CreateTagSchema, UpdateTagSchema } from '#apps/blog/validators/tag_validator'
+import { CreateTagSchema, UpdateTagSchema } from '#apps/blog/validators/tag'
 import { FindAll } from '#apps/users/contracts/role'
 
 export default class TagService {

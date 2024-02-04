@@ -1,4 +1,4 @@
-import { CreateCategorySchema, UpdateCategorySchema } from '#apps/blog/validators/category_validator'
+import { CreateCategorySchema, UpdateCategorySchema } from '#apps/blog/validators/category'
 import { FindAll } from '#apps/users/contracts/role'
 import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'

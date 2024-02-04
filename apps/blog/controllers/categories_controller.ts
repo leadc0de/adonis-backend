@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import CategoryService from '#apps/blog/services/category_service'
-import { createCategoryValidator, updateCategoryValidator } from '#apps/blog/validators/category_validator'
+import { createCategoryValidator, updateCategoryValidator } from '#apps/blog/validators/category'
 import { inject } from '@adonisjs/core'
 import Category from '#apps/blog/models/category'
 import CategoryPolicy from '#apps/blog/policies/category_policy'

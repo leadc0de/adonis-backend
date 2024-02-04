@@ -3,7 +3,7 @@ import TagService from '#apps/blog/services/tag_service'
 import { inject } from '@adonisjs/core'
 import RolePolicy from '#apps/users/policies/role_policy'
 import TagPolicy from '#apps/blog/policies/tag_policy'
-import { createTagValidator } from '#apps/blog/validators/tag_validator'
+import { createTagValidator } from '#apps/blog/validators/tag'
 import Tag from '#apps/blog/models/tag'
 
 @inject()

@@ -23,4 +23,6 @@ router.group(() => {
   router.group(() => {
     router.get('/', [PermissionsController, 'index'])
   }).prefix('/permissions')
-}).use(middleware.auth())
+}).use(middleware.auth({
+  guards: ['jwt']
+}))

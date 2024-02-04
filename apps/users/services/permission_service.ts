@@ -6,9 +6,9 @@ import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 import Permission from '#apps/users/models/permission'
 
 export default class PermissionService {
-  async findAll({ page = 1, size = 10 }: FindAll) {
+  async findAll({ page = 1, limit = 10 }: FindAll) {
     return Permission.query()
-      .paginate(page, size)
+      .paginate(page, limit)
   }
 
   async findById(permissionId: Permission['id']) {

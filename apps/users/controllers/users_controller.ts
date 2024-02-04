@@ -3,14 +3,14 @@ import {inject} from '@adonisjs/core'
 import UserService from '#apps/users/services/user_service'
 import UserPolicy from '#apps/users/policies/user_policy'
 import {createUserValidator} from "#apps/users/validators/user";
+import KeycloakService from "#apps/authentication/services/keycloak_service";
 
 @inject()
 export default class UsersController {
-  constructor(protected userService: UserService) {}
+  constructor(protected userService: UserService, protected keycloakService: KeycloakService) {}
 
   async index({ request, response, bouncer }: HttpContext) {
     await bouncer.with(UserPolicy).authorize('view' as never)
-
     const page = request.input('page', 1)
     const size = request.input('size', 30)
     const includeRole = request.input('includeRole', false)

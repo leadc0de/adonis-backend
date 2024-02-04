@@ -5,10 +5,10 @@ import db from '@adonisjs/lucid/services/db'
 import { TransactionClientContract } from '@adonisjs/lucid/types/database'
 
 export default class RoleService {
-  async findAll({ page = 1, size = 10 }: FindAll) {
+  async findAll({ page = 1, limit = 10 }: FindAll) {
     return Role
       .query()
-      .paginate(page, size)
+      .paginate(page, limit)
   }
 
   async findById(roleId: Role['id']) {

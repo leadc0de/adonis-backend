@@ -46,7 +46,9 @@ export default defineConfig({
   |
   */
   preloads: [
-    () => import('#start/routes'), () => import('#start/kernel'),
+    () => import('#start/routes'),
+    () => import('#start/kernel'),
+    () => import('#start/vine/rules'),
     () => import('#apps/users/routes'),
     () => import('#start/ws'),
     () => import('#apps/authentication/routes'),

@@ -3,7 +3,7 @@ import { Infer } from '@vinejs/vine/types'
 
 /**
  * Validator to validate the payload when creating
- * a new tag_validator.ts.
+ * a new tag.ts.
  */
 export const createTagValidator = vine.compile(
   vine.object({
@@ -15,7 +15,7 @@ export const createTagValidator = vine.compile(
 
 /**
  * Validator to validate the payload when updating
- * an existing tag_validator.ts.
+ * an existing tag.ts.
  */
 export const updateTagValidator = vine.compile(
   vine.object({

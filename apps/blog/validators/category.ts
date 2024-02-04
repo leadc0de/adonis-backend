@@ -22,7 +22,7 @@ const requiredOnPublishFields = vine.group([
 
 /**
  * Validator to validate the payload when creating
- * a new category_validator.ts.
+ * a new category.ts.
  */
 export const createCategoryValidator = vine.compile(
   vine.object({
@@ -33,7 +33,7 @@ export const createCategoryValidator = vine.compile(
 
 /**
  * Validator to validate the payload when updating
- * an existing category_validator.ts.
+ * an existing category.ts.
  */
 export const updateCategoryValidator = vine.compile(
   vine.object({

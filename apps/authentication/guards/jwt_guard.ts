@@ -1,95 +1,53 @@
-import {AuthClientResponse, GuardContract} from "@adonisjs/auth/types"
-import {symbols } from "@adonisjs/auth"
-import {HttpContext } from "@adonisjs/core/http"
-import User from "#apps/users/models/user"
-import {AccessTokensUserProviderContract} from "@adonisjs/auth/types/access_tokens"
+import { AuthClientResponse, GuardContract } from '@adonisjs/auth/types'
+import { symbols } from '@adonisjs/auth'
+import { HttpContext } from '@adonisjs/core/http'
+import User from '#apps/users/models/user'
+import { AccessTokensUserProviderContract } from '@adonisjs/auth/types/access_tokens'
 import jwt from 'jsonwebtoken'
 import { errors as authErrors } from '@adonisjs/auth'
-import {inject} from "@adonisjs/core"
-import KeycloakService from "#apps/authentication/services/keycloak_service"
-
-export type ResourceAccess = {
-  [key: string]: {
-    roles: string[]
-  }
-}
-
-export type JWTPayloadData = {
-  exp: number
-  iat: number
-  auth_time: number
-  jti: string
-  iss: string
-  aud: string
-  sub: string
-  typ: string
-  azp: string
-  nonce: string
-  session_state: string
-  acr: string
-  allowed_origins: string[]
-  realm_access: {
-    roles: string[]
-  }
-  resource_access: ResourceAccess
-  scope: string
-  sid: string
-  upn: string
-  email_verified: boolean
-  name: string
-  groups: string[]
-  preferred_username: string
-  given_name: string
-  family_name: string
-  email: string
-}
+import { inject } from '@adonisjs/core'
+import KeycloakService from '#apps/authentication/services/keycloak_service'
+import { JwtPayload } from '#apps/authentication/contracts/jwt'
 
 @inject()
-export class JwtGuard<
-  UserProvider extends AccessTokensUserProviderContract<unknown>
-> implements GuardContract<
-  UserProvider[typeof symbols.PROVIDER_REAL_USER]
-> {
-  #userProvider: UserProvider
-  #ctx: HttpContext
-  payload?: JWTPayloadData
-
-  constructor(
-    ctx: HttpContext,
-    userProvider: UserProvider,
-    protected keycloakService: KeycloakService
-  ) {
-    this.#ctx = ctx
-    this.#userProvider = userProvider
-  }
-
-
+export class JwtGuard<UserProvider extends AccessTokensUserProviderContract<unknown>> implements GuardContract<UserProvider[typeof symbols.PROVIDER_REAL_USER]> {
   declare [symbols.GUARD_KNOWN_EVENTS]: {}
 
-  driverName: 'jwt' = 'jwt'
+  public driverName: string = 'jwt'
 
-  authenticationAttempted: boolean = false
-  isAuthenticated: boolean = false
-  user?: UserProvider[typeof symbols.PROVIDER_REAL_USER]
+  public authenticationAttempted: boolean = false
+  public isAuthenticated: boolean = false
+  public user?: UserProvider[typeof symbols.PROVIDER_REAL_USER]
+  public payload?: JwtPayload | string
+
+  constructor(
+    private ctx: HttpContext,
+    private userProvider: UserProvider,
+    protected keycloakService: KeycloakService
+  ) {}
 
   async authenticate() {
-    //this.authenticationAttempted = true
-
-    const authHeader = this.#ctx.request.header('authorization')
+    const authHeader: string | undefined = this.ctx.request.header('authorization')
     if (!authHeader) {
-      throw new authErrors.E_UNAUTHORIZED_ACCESS('Unauthorized access', { guardDriverName: this.driverName })
+      throw new authErrors.E_UNAUTHORIZED_ACCESS(
+        'Unauthorized access', {
+          guardDriverName: this.driverName
+        })
     }
 
     const [, token] = authHeader.split('Bearer ')
     if (!token) {
-      throw new authErrors.E_UNAUTHORIZED_ACCESS('WESH PAS DE TOKEN access', { guardDriverName: this.driverName })
+      throw new authErrors.E_UNAUTHORIZED_ACCESS(
+        'No access token was found', {
+          guardDriverName: this.driverName
+        })
     }
-    const payload = await this.verifyToken(token)
-    this.payload = payload as any
+
+    this.payload = await this.verifyToken(token)
   }
 
   async authenticateAsClient(user: UserProvider[typeof symbols.PROVIDER_REAL_USER], ...args: any[]): Promise<AuthClientResponse> {
-    const token = await this.#userProvider.createToken(user, args)
+    const token = await this.userProvider.createToken(user, args)
     return {
       headers: {
         authorization: `Bearer ${token.value!.release()}`
@@ -102,24 +60,24 @@ export class JwtGuard<
     return Promise.resolve(true)
   }
 
-  getUserOrFail(): UserProvider[typeof symbols.PROVIDER_REAL_USER] {
-    return User.query().first();
+  public async getUserOrFail(): Promise<UserProvider[typeof symbols.PROVIDER_REAL_USER]> {
+    return User.query().firstOrFail()
   }
-  async verifyToken(token: string) {
+
+  public async verifyToken(token: string): Promise<string | JwtPayload> {
     try {
       const key = await this.keycloakService.getPublicCert()
       const publicKey = `-----BEGIN CERTIFICATE-----\n${key}\n-----END CERTIFICATE-----`
 
-      const decodedToken = jwt.decode(token, { complete: true })
-
+      const decodedToken = jwt.decode(token, {complete: true})
       const algorithm = decodedToken?.header.alg as jwt.Algorithm
 
-      const verifyToken = jwt.verify(token, publicKey, { algorithms: [algorithm] })
-      return verifyToken
+      return jwt.verify(token, publicKey, { algorithms: [algorithm] })
     } catch (e) {
-      console.log(e)
-      throw new authErrors.E_UNAUTHORIZED_ACCESS('Unauthorized access', { guardDriverName: this.driverName })
+      throw new authErrors.E_UNAUTHORIZED_ACCESS(
+        'Unauthorized access', {
+          guardDriverName: this.driverName
+        })
     }
   }
-
 }

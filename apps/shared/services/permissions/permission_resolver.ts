@@ -1,6 +1,6 @@
 import User from "#apps/users/models/user";
 import PermissionResolverBuilder from '#apps/shared/services/permissions/permission_resolver_builder'
-import {ResourceAccess} from "#apps/authentication/guards/jwt_guard";
+import { ResourceAccess } from '#apps/authentication/contracts/jwt'
 
 export default class PermissionResolver {
   async getPermissions(user: User) {

@@ -5,6 +5,13 @@ import {Infer} from "@vinejs/vine/types";
  * Validator to validate the payload when creating
  * a new authentication.
  */
+export const loginCredentialsValidator = vine.compile(
+  vine.object({
+    username: vine.string(),
+    password: vine.string(),
+  })
+)
+
 export const registerAuthenticationValidator = vine
   //.withMetaData<{ userId: string }>()
   .compile(

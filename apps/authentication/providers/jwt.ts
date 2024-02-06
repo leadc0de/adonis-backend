@@ -12,6 +12,7 @@ export function jwtGuard<UserProvider extends AccessTokensUserProviderContract<u
   return {
     async resolver() {
       const provider = config.provider
+
       return (ctx) => {
         return new JwtGuard(ctx, provider, new KeycloakService())
       }

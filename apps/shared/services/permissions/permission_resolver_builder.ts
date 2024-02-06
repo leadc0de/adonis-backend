@@ -1,5 +1,5 @@
 import PermissionResolver from '#apps/shared/services/permissions/permission_resolver'
-import {ResourceAccess} from '#apps/authentication/guards/jwt_guard'
+import { ResourceAccess } from '#apps/authentication/contracts/jwt'
 
 export default class PermissionResolverBuilder {
   constructor (

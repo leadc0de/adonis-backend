@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken'
 import { errors as authErrors } from '@adonisjs/auth'
 import {inject} from "@adonisjs/core"
 import KeycloakService from "#apps/authentication/services/keycloak_service"
-import logger from "@adonisjs/core/services/logger"
 
 export type ResourceAccess = {
   [key: string]: {

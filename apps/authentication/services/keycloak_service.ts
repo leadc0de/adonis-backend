@@ -81,7 +81,7 @@ export default class KeycloakService {
     return response.data.access_token
   }
 
-  async createUser(user): Promise<string | undefined> {
+  async createUser(user: any): Promise<string | undefined> {
     try {
       const url = `${this.config.url}/admin/realms/${this.config.realm}/users`
 

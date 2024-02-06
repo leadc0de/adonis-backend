@@ -2,18 +2,18 @@ import {allowGuest, BasePolicy} from '@adonisjs/bouncer'
 import { AuthorizerResponse } from '@adonisjs/bouncer/types'
 import { inject } from '@adonisjs/core'
 import PermissionResolver from '#apps/shared/services/permissions/permission_resolver'
-import {JWTPayloadData} from "#apps/authentication/guards/jwt_guard";
-import {HttpContext} from "@adonisjs/core/http";
+import { JwtPayload } from '#apps/authentication/contracts/jwt';
+import {HttpContext} from '@adonisjs/core/http';
 
 @inject()
 export default class RolePolicy extends BasePolicy {
-  protected payload: JWTPayloadData
+  protected payload: JwtPayload
   constructor(
     protected permissionResolver: PermissionResolver,
     protected ctx: HttpContext
   ) {
     super()
-    this.payload = ctx.auth.use('jwt').payload!
+    this.payload = ctx.auth.use('jwt').payload! as JwtPayload
   }
 
   async before() {

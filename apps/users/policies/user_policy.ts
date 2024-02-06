@@ -3,17 +3,18 @@ import { AuthorizerResponse } from '@adonisjs/bouncer/types'
 import { inject } from '@adonisjs/core'
 import PermissionResolver from '#apps/shared/services/permissions/permission_resolver'
 import {HttpContext} from '@adonisjs/core/http'
-import {JWTPayloadData} from '#apps/authentication/guards/jwt_guard'
+import { JwtPayload } from '#apps/authentication/contracts/jwt'
 
 @inject()
 export default class UserPolicy extends BasePolicy {
-  protected payload: JWTPayloadData
+  protected payload: JwtPayload
+
   constructor(
     protected permissionResolver: PermissionResolver,
     protected ctx: HttpContext
   ) {
     super()
-    this.payload = ctx.auth.use('jwt').payload!
+    this.payload = ctx.auth.use('jwt').payload! as JwtPayload
   }
 
   async before() {
@@ -29,7 +30,7 @@ export default class UserPolicy extends BasePolicy {
   @allowGuest()
   async view(): Promise<AuthorizerResponse> {
     return this.permissionResolver
-      .createResolve(this.payload.resource_access, 'account')
+      .createResolve(this.payload?.resource_access, 'account')
       .verifyAccess('manage-account')
   }
 }

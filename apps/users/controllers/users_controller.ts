@@ -4,6 +4,7 @@ import UserService from '#apps/users/services/user_service'
 import UserPolicy from '#apps/users/policies/user_policy'
 import {createUserValidator} from "#apps/users/validators/user";
 import KeycloakService from "#apps/authentication/services/keycloak_service";
+import logger from "@adonisjs/core/services/logger";
 
 @inject()
 export default class UsersController {
@@ -53,5 +54,7 @@ export default class UsersController {
   /**
    * Delete record
    */
-  async destroy({ }: HttpContext) {}
+  async destroy({ params }: HttpContext) {
+    logger.info(`try to delete user: ${params.id}`)
+  }
 }

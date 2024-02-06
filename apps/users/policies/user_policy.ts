@@ -28,7 +28,6 @@ export default class UserPolicy extends BasePolicy {
 
   @allowGuest()
   async view(): Promise<AuthorizerResponse> {
-    console.log(this.payload)
     return this.permissionResolver
       .createResolve(this.payload.resource_access, 'account')
       .verifyAccess('manage-account')

@@ -7,7 +7,10 @@ import logger from "@adonisjs/core/services/logger"
 
 @inject()
 export default class AuthenticationController {
-  constructor(protected authenticationService: AuthenticationService, protected keycloakService: KeycloakService) {}
+  constructor(
+    protected authenticationService: AuthenticationService,
+    protected keycloakService: KeycloakService,
+  ) {}
 
   async login({ request, response }: HttpContext) {
     const { username, password } = request.only(['username', 'password'])

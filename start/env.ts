@@ -39,6 +39,9 @@ export default await Env.create(new URL('../', import.meta.url), {
   OIDC_REALM: Env.schema.string(),
   OIDC_URL: Env.schema.string(),
 
+  OIDC_CLIENT_ID: Env.schema.string(),
+  OIDC_CLIENT_SECRET: Env.schema.string(),
+
   OIDC_ADMIN_CLIENT_ID: Env.schema.string(),
   OIDC_ADMIN_CLIENT_SECRET: Env.schema.string(),
 })

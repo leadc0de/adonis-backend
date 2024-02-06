@@ -85,7 +85,6 @@ export class JwtGuard<
     if (!token) {
       throw new authErrors.E_UNAUTHORIZED_ACCESS('WESH PAS DE TOKEN access', { guardDriverName: this.driverName })
     }
-    logger.info('Verify token')
     const payload = await this.verifyToken(token)
     this.payload = payload as any
   }

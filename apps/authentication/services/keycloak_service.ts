@@ -1,7 +1,7 @@
-import keycloak from "#config/keycloak";
-import axios from "axios";
-import logger from "@adonisjs/core/services/logger";
-
+import keycloak from '#config/keycloak'
+import axios from 'axios'
+import logger from '@adonisjs/core/services/logger'
+import { errors as authErrors } from '@adonisjs/auth'
 
 type WellKnownKeyResponse = {
   keys: {
@@ -17,9 +17,20 @@ type WellKnownKeyResponse = {
   }[]
 }
 
+type GetAdminTokenResponse = {
+  access_token: string
+  expires_in: number
+  refresh_expires_in: number
+  'not-before-policy': number
+  token_type: string
+  scope: string
+}
+
 type KeycloakConfig = {
   realm?: string
   url?: string
+  clientId?: string
+  clientSecret?: string
   admin: {
     clientId?: string
     clientSecret?: string
@@ -52,6 +63,67 @@ export default class KeycloakService {
     return this.publicCert
   }
 
+  private async getAdminToken(): Promise<string> {
+    const url = `${this.config.url}/realms/${this.config.realm}/protocol/openid-connect/token`
+
+    const data = {
+      grant_type: 'client_credentials',
+      client_id: this.config.admin.clientId,
+      client_secret: this.config.admin.clientSecret,
+    }
+
+    const response = await axios.post<GetAdminTokenResponse>(url, data, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    })
+
+    return response.data.access_token
+  }
+
+  async createUser(user): Promise<string | undefined> {
+    try {
+      const url = `${this.config.url}/admin/realms/${this.config.realm}/users`
+
+      const tokenResponse = await this.getAdminToken()
+
+      const response = await axios.post(url, user, {
+        headers: {
+          Authorization: `Bearer ${tokenResponse}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      if (![200, 204, 201].includes(response.status)) {
+        throw new authErrors.E_UNAUTHORIZED_ACCESS("Failed to create user", { guardDriverName: "jwt" })
+      }
+
+      const locationHeader: string = response.headers['location']
+
+      return locationHeader.split('/').pop()
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const url = `${this.config.url}/admin/realms/${this.config.realm}/users/${userId}`
+
+    const tokenResponse = await this.getAdminToken()
+
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${tokenResponse}`,
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (![200, 204, 201].includes(response.status)) {
+      throw new authErrors.E_UNAUTHORIZED_ACCESS("Failed to delete user", { guardDriverName: "jwt" })
+    }
+  }
+
   public async loginWithPassword(username: string, password: string) {
     logger.info(`User login: ${username}`)
 
@@ -60,8 +132,8 @@ export default class KeycloakService {
         `${this.config.url}/realms/${this.config.realm}/protocol/openid-connect/token`,
         {
           grant_type: 'password',
-          client_id: this.config.admin.clientId,
-          client_secret: this.config.admin.clientSecret,
+          client_id: this.config.clientId,
+          client_secret: this.config.clientSecret,
           password: password,
           username: username,
         },

@@ -17,6 +17,8 @@ export default class UsersController {
     const includeRole = request.input('includeRole', false)
 
     const users = await this.userService.findAll({ page, size, includeRole })
+
+
     return response.send(users)
   }
 
@@ -54,7 +56,13 @@ export default class UsersController {
   /**
    * Delete record
    */
-  async destroy({ params }: HttpContext) {
+  async delete({ params, response }: HttpContext) {
     logger.info(`try to delete user: ${params.id}`)
+
+    await this.userService.deleteById(params.id)
+
+    return response.send({
+      message: 'uspnper has been deleted'
+    })
   }
 }

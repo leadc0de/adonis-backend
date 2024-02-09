@@ -2,21 +2,21 @@ import {BasePolicy} from '@adonisjs/bouncer'
 import { AuthorizerResponse } from '@adonisjs/bouncer/types'
 import { inject } from '@adonisjs/core'
 import PermissionResolver from '#apps/shared/services/permissions/permission_resolver'
-import { JwtPayload } from '#apps/authentication/contracts/jwt'
 import { HttpContext } from '@adonisjs/core/http'
+import { JwtPayload } from '#apps/authentication/contracts/jwt'
 
 @inject()
-export default class CategoryPolicy extends BasePolicy {
+export default class ArticlePolicy extends BasePolicy {
   private payload: JwtPayload
 
-  constructor(private permissionResolver: PermissionResolver, protected ctx: HttpContext) {
+  constructor(protected permissionResolver: PermissionResolver, protected ctx: HttpContext) {
     super()
     this.payload = ctx.auth.use('jwt').payload! as JwtPayload
   }
 
   async before() {
     const isAdmin = await this.permissionResolver
-      .createResolve(this.payload.resource_access, 'category')
+      .createResolve(this.payload.resource_access, 'article')
       .verifyAccess('admin')
 
     if (isAdmin) {
@@ -26,25 +26,25 @@ export default class CategoryPolicy extends BasePolicy {
 
   async view(): Promise<AuthorizerResponse> {
     return this.permissionResolver
-      .createResolve(this.payload.resource_access, 'category')
+      .createResolve(this.payload.resource_access, 'article')
       .verifyAccess('view', 'store', 'update', 'delete')
   }
 
   async store(): Promise<AuthorizerResponse> {
     return this.permissionResolver
-      .createResolve(this.payload.resource_access, 'category')
-      .verifyAccess('view', 'store')
+      .createResolve(this.payload.resource_access, 'article')
+      .verifyAccess('store')
   }
 
   async update(): Promise<AuthorizerResponse> {
     return this.permissionResolver
-      .createResolve(this.payload.resource_access, 'category')
-      .verifyAccess('view', 'update')
+      .createResolve(this.payload.resource_access, 'article')
+      .verifyAccess('update')
   }
 
   async destroy(): Promise<AuthorizerResponse> {
     return this.permissionResolver
-      .createResolve(this.payload.resource_access, 'category')
-      .verifyAccess('view', 'delete')
+      .createResolve(this.payload.resource_access, 'article')
+      .verifyAccess('delete')
   }
 }

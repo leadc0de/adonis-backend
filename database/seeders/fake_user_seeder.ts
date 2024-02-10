@@ -6,7 +6,7 @@ export default class extends BaseSeeder {
     // Write your database queries inside the run method
 
     await User.create({
-      id: '9b12bff7-aa2a-4e96-afe2-2b9fe72bdb2c',
+      id: 'decb2de2-4aeb-45c7-bf4d-a83ef4aaf0c4',
       email: 'nathael.bonnal@gmail.com',
       firstname: 'Nathael',
       lastname: 'Bonnal',

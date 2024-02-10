@@ -33,6 +33,7 @@ export default class UserService {
 
   async create(payload: CreateUserSchema): Promise<User> {
     logger.info("[*] UserService: created this")
+
     const id = await this.keycloakService.createUser({
       username: payload.username,
       firstName: payload.firstname,

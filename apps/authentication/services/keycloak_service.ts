@@ -2,6 +2,7 @@ import keycloak from '#config/keycloak'
 import axios from 'axios'
 import logger from '@adonisjs/core/services/logger'
 import { errors as authErrors } from '@adonisjs/auth'
+import {errors} from "@adonisjs/core";
 
 type WellKnownKeyResponse = {
   keys: {
@@ -102,9 +103,9 @@ export default class KeycloakService {
 
       return locationHeader.split('/').pop()
     } catch (err) {
-      console.log(err)
+      logger.error({ message: err.message }, "failed to create user in keycloak")
+      throw new errors.E_HTTP_EXCEPTION('Error failed to create user')
     }
-
   }
 
   async deleteUser(userId: string): Promise<void> {

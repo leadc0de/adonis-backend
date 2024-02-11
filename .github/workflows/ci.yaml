@@ -82,7 +82,6 @@ jobs:
         with:
           ref: ${{ inputs.tag }}
           repository: ${{ inputs.repository }}
-          token: ${{ secrets.PAT }}
           fetch-tags: true
           fetch-depth: 0
   build-and-push-image:

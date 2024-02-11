@@ -126,5 +126,5 @@ jobs:
           context: .
           build-args: ${{ inputs.build-args }}
           push: true
-          tags: ${{ env.TAG_VERSION }}"
+          tags: ${{ env.TAG_VERSION }}
           labels: ${{ steps.meta.outputs.labels }}

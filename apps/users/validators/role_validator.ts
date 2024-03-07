@@ -22,6 +22,7 @@ const permissionValidation = {
 export const storeRoleValidator = vine.compile(
   vine.object({
     label: vine.string().trim(),
+    description: vine.string().trim().optional(),
     power: vine.number().range([0, 100]),
     ...permissionValidation
   })
@@ -34,6 +35,7 @@ export const storeRoleValidator = vine.compile(
 export const updateRoleValidator = vine.compile(
   vine.object({
     label: vine.string().trim().optional(),
+    description: vine.string().trim().optional(),
     power: vine.number().range([0, 100]).optional(),
     ...permissionValidation
   })

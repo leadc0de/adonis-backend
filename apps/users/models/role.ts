@@ -13,6 +13,9 @@ export default class Role extends BaseModel {
   declare label: string
 
   @column()
+  declare description: string
+
+  @column()
   declare power: number
 
   @manyToMany(() => User)
